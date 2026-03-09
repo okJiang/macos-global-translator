@@ -1,0 +1,45 @@
+name: GlobalTranslator
+options:
+  bundleIdPrefix: com.okjiang
+  deploymentTarget:
+    macOS: "14.0"
+targets:
+  GlobalTranslator:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - GlobalTranslator
+    info:
+      path: GlobalTranslator/Resources/Info.plist
+    entitlements:
+      path: GlobalTranslator/Resources/GlobalTranslator.entitlements
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.okjiang.globaltranslator
+      PRODUCT_NAME: GlobalTranslator
+      PRODUCT_MODULE_NAME: GlobalTranslatorApp
+      SWIFT_VERSION: "6.0"
+      GENERATE_INFOPLIST_FILE: NO
+      INFOPLIST_KEY_LSUIElement: YES
+  FixtureEditorApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - Harness/FixtureEditorApp
+    info:
+      path: Harness/FixtureEditorApp/Info.plist
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.okjiang.fixtureeditor
+      PRODUCT_NAME: FixtureEditorApp
+      SWIFT_VERSION: "6.0"
+      GENERATE_INFOPLIST_FILE: NO
+  GlobalTranslatorTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - GlobalTranslatorTests
+    dependencies:
+      - target: GlobalTranslator
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
