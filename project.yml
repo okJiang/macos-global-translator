@@ -19,6 +19,7 @@ targets:
       PRODUCT_NAME: GlobalTranslator
       PRODUCT_MODULE_NAME: GlobalTranslatorApp
       SWIFT_VERSION: "6.0"
+      SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
       GENERATE_INFOPLIST_FILE: NO
       INFOPLIST_KEY_LSUIElement: YES
   FixtureEditorApp:
@@ -43,3 +44,4 @@ targets:
       - target: GlobalTranslator
     settings:
       GENERATE_INFOPLIST_FILE: YES
+      SWIFT_TREAT_WARNINGS_AS_ERRORS: YES

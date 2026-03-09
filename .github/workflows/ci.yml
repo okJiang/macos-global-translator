@@ -11,10 +11,5 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.0"
-      - name: Build
-        run: swift build -Xswiftc -warnings-as-errors
-      - name: Test
-        run: swift test
+      - name: Test Xcode project
+        run: xcodebuild test -project GlobalTranslator.xcodeproj -scheme GlobalTranslator -destination 'platform=macOS'
