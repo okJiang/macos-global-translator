@@ -22,7 +22,7 @@ A native macOS menu bar translator that captures selected editable text, transla
 ## Local Development
 
 ```bash
-swift build -Xswiftc -warnings-as-errors
+swift build --product GlobalTranslator -Xswiftc -warnings-as-errors
 swift test
 ./scripts/generate_xcodeproj.sh
 open GlobalTranslator.xcodeproj
