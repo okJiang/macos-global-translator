@@ -14,7 +14,7 @@ enum ProviderRegistryError: LocalizedError {
 struct ProviderRegistry: Sendable {
     private let providers: [String: any TranslationProvider]
 
-    init(providers: [any TranslationProvider] = [OpenAIProvider(), DeepLProvider()]) {
+    init(providers: [any TranslationProvider] = [OpenAIProvider(), DeepLProvider(), GoogleCloudTranslationProvider()]) {
         self.providers = Dictionary(uniqueKeysWithValues: providers.map { ($0.id, $0) })
     }
 

@@ -9,7 +9,7 @@ A native macOS menu bar translator that captures selected editable text, transla
 - Background serial translation queue
 - Direct writeback to the original selection when the source element is still writable
 - Safe fallback to notification plus clipboard when writeback fails
-- Built-in OpenAI and DeepL adapters, with a provider registry for future adapters
+- Built-in OpenAI, DeepL, and Google Cloud Translation Basic v2 adapters, with a provider registry for future adapters
 
 ## Project Layout
 
