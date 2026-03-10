@@ -40,39 +40,3 @@ final class OpenAIProviderTests: XCTestCase {
         XCTAssertTrue(body.contains("Translate the provided text into French"))
     }
 }
-
-private actor RequestRecorder {
-    private(set) var lastRequest: URLRequest?
-
-    func record(_ request: URLRequest) {
-        lastRequest = request
-    }
-}
-
-private struct MockHTTPClient: HTTPClient {
-    let recorder: RequestRecorder
-    let responseData: Data
-
-    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
-        await recorder.record(request)
-        return (
-            responseData,
-            HTTPURLResponse(
-                url: request.url!,
-                statusCode: 200,
-                httpVersion: nil,
-                headerFields: ["Content-Type": "application/json"]
-            )!
-        )
-    }
-}
-
-private extension Data {
-    func utf8String() throws -> String {
-        guard let string = String(data: self, encoding: .utf8) else {
-            throw URLError(.cannotDecodeContentData)
-        }
-
-        return string
-    }
-}

@@ -8,6 +8,11 @@ struct SettingsView: View {
     @State private var model = ""
     @State private var apiKey = ""
 
+    private var selectedProviderDescriptor: ProviderDescriptor {
+        controller.providerRegistry.descriptor(for: selectedProvider)
+            ?? OpenAIProvider().descriptor
+    }
+
     var body: some View {
         Form {
             Section("Translation") {
@@ -25,7 +30,9 @@ struct SettingsView: View {
                     }
                 }
 
-                TextField("Model", text: $model)
+                if selectedProviderDescriptor.supportsCustomModel {
+                    TextField("Model", text: $model)
+                }
             }
 
             Section("Actions") {
@@ -33,14 +40,18 @@ struct SettingsView: View {
                     controller.settingsStore.updateTargetLanguage(targetLanguage)
                     controller.settingsStore.updateHotkey(hotkey)
                     controller.settingsStore.updateDefaultProvider(selectedProvider)
-                    controller.settingsStore.setAPIModel(model, for: selectedProvider)
+                    if selectedProviderDescriptor.supportsCustomModel {
+                        controller.settingsStore.setAPIModel(model, for: selectedProvider)
+                    } else {
+                        controller.settingsStore.setAPIModel("", for: selectedProvider)
+                    }
                     controller.refreshHotkey()
                 }
             }
 
-            Section("Credentials") {
-                SecureField("API key", text: $apiKey)
-                Button("Save API key") {
+            Section(selectedProviderDescriptor.credentialLabel) {
+                SecureField(selectedProviderDescriptor.credentialPlaceholder, text: $apiKey)
+                Button("Save \(selectedProviderDescriptor.credentialLabel)") {
                     controller.saveAPIKey(apiKey)
                 }
             }
@@ -68,12 +79,16 @@ struct SettingsView: View {
             targetLanguage = controller.settingsStore.settings.targetLanguage
             hotkey = controller.settingsStore.settings.hotkey
             selectedProvider = controller.settingsStore.settings.defaultProvider
-            model = controller.settingsStore.settings.preferences(for: selectedProvider).model
-            apiKey = controller.credentialStore.apiKey(for: selectedProvider)
+            reloadProviderFields(for: selectedProvider)
         }
         .onChange(of: selectedProvider) { _, newValue in
-            model = controller.settingsStore.settings.preferences(for: newValue).model
-            apiKey = controller.credentialStore.apiKey(for: newValue)
+            reloadProviderFields(for: newValue)
         }
+    }
+
+    private func reloadProviderFields(for providerID: String) {
+        let descriptor = controller.providerRegistry.descriptor(for: providerID) ?? OpenAIProvider().descriptor
+        model = controller.settingsStore.settings.preferences(for: providerID).model ?? descriptor.defaultModel ?? ""
+        apiKey = controller.credentialStore.apiKey(for: providerID)
     }
 }

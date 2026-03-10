@@ -14,7 +14,7 @@ enum ProviderRegistryError: LocalizedError {
 struct ProviderRegistry: Sendable {
     private let providers: [String: any TranslationProvider]
 
-    init(providers: [any TranslationProvider] = [OpenAIProvider()]) {
+    init(providers: [any TranslationProvider] = [OpenAIProvider(), DeepLProvider()]) {
         self.providers = Dictionary(uniqueKeysWithValues: providers.map { ($0.id, $0) })
     }
 
@@ -26,7 +26,11 @@ struct ProviderRegistry: Sendable {
         return provider
     }
 
-    var availableProviders: [(id: String, displayName: String)] {
-        providers.values.map { ($0.id, $0.displayName) }.sorted { $0.id < $1.id }
+    func descriptor(for providerID: String) -> ProviderDescriptor? {
+        providers[providerID]?.descriptor
+    }
+
+    var availableProviders: [ProviderDescriptor] {
+        providers.values.map(\.descriptor).sorted { $0.id < $1.id }
     }
 }
