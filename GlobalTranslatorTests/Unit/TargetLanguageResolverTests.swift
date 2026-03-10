@@ -26,4 +26,12 @@ final class TargetLanguageResolverTests: XCTestCase {
             XCTAssertEqual(resolutionError, .unsupported(rawValue: "Martian", providerID: "deepl"))
         }
     }
+
+    func testResolvesCommonLanguageNamesForGoogle() throws {
+        let resolver = TargetLanguageResolver()
+
+        XCTAssertEqual(try resolver.resolve("Spanish", for: "google"), "es")
+        XCTAssertEqual(try resolver.resolve("ja", for: "google"), "ja")
+        XCTAssertEqual(try resolver.resolve("ZH-HANS", for: "google"), "zh-CN")
+    }
 }
