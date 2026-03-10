@@ -6,6 +6,7 @@ struct GoogleCloudTranslationProvider: TranslationProvider {
         displayName: "Google Cloud",
         credentialLabel: "API key",
         credentialPlaceholder: "Google Cloud API key",
+        requiresStoredCredential: true,
         supportsCustomModel: false,
         defaultModel: nil
     )
@@ -26,9 +27,12 @@ struct GoogleCloudTranslationProvider: TranslationProvider {
 
     func translate(
         _ request: TranslationRequest,
-        credential: ProviderCredential,
+        credential: ProviderCredential?,
         preferences: ProviderPreferences
     ) async throws -> TranslationResponse {
+        guard let credential else {
+            throw URLError(.userAuthenticationRequired)
+        }
         _ = preferences
         let targetLanguage = try targetLanguageResolver.resolve(request.targetLanguage, for: descriptor.id)
         guard var components = URLComponents(url: endpoint, resolvingAgainstBaseURL: false) else {

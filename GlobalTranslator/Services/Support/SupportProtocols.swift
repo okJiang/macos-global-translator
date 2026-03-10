@@ -22,6 +22,12 @@ protocol SecretStoring {
     func writeSecret(_ value: String, for key: String) throws
 }
 
+protocol FileManaging: Sendable {
+    func fileExists(atPath path: String) -> Bool
+}
+
+extension FileManager: FileManaging {}
+
 protocol ClipboardWriting {
     func copy(_ string: String)
 }
@@ -63,3 +69,88 @@ protocol HTTPClient: Sendable {
 }
 
 extension URLSession: HTTPClient {}
+
+struct CommandInvocation: Sendable {
+    let executableURL: URL
+    let arguments: [String]
+    let workingDirectoryURL: URL?
+    let environment: [String: String]
+    let timeout: TimeInterval
+}
+
+struct CommandResult: Sendable {
+    let stdout: String
+    let stderr: String
+    let exitCode: Int32
+}
+
+protocol CommandRunning: Sendable {
+    func run(_ invocation: CommandInvocation) async throws -> CommandResult
+}
+
+enum CommandRunnerError: LocalizedError {
+    case timedOut(command: String)
+    case failedToLaunch(String)
+
+    var errorDescription: String? {
+        switch self {
+        case let .timedOut(command):
+            return "The command timed out: \(command)"
+        case let .failedToLaunch(message):
+            return message
+        }
+    }
+}
+
+struct ProcessCommandRunner: CommandRunning {
+    func run(_ invocation: CommandInvocation) async throws -> CommandResult {
+        try await Task.detached(priority: nil) {
+            try runSynchronously(invocation)
+        }.value
+    }
+
+    private func runSynchronously(_ invocation: CommandInvocation) throws -> CommandResult {
+        let process = Process()
+        process.executableURL = invocation.executableURL
+        process.arguments = invocation.arguments
+        if let workingDirectoryURL = invocation.workingDirectoryURL {
+            process.currentDirectoryURL = workingDirectoryURL
+        }
+        if !invocation.environment.isEmpty {
+            process.environment = invocation.environment
+        }
+
+        let stdoutPipe = Pipe()
+        let stderrPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        process.standardError = stderrPipe
+
+        let finished = DispatchSemaphore(value: 0)
+        process.terminationHandler = { _ in
+            finished.signal()
+        }
+
+        do {
+            try process.run()
+        } catch {
+            throw CommandRunnerError.failedToLaunch(error.localizedDescription)
+        }
+
+        if finished.wait(timeout: .now() + invocation.timeout) == .timedOut {
+            process.terminate()
+            _ = finished.wait(timeout: .now() + 1)
+            throw CommandRunnerError.timedOut(
+                command: ([invocation.executableURL.path] + invocation.arguments).joined(separator: " ")
+            )
+        }
+
+        let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+        let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
+
+        return CommandResult(
+            stdout: String(data: stdoutData, encoding: .utf8) ?? "",
+            stderr: String(data: stderrData, encoding: .utf8) ?? "",
+            exitCode: process.terminationStatus
+        )
+    }
+}

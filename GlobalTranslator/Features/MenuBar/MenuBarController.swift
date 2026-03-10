@@ -11,6 +11,7 @@ final class MenuBarController: ObservableObject {
     let providerRegistry: ProviderRegistry
 
     private let captureService: AccessibilityCaptureService
+    private let copilotExecutableLocator: any CopilotCLIExecutableLocating
     private let writebackService: WritebackService
     private let notificationCenter: any UserNotificationCentering
     private let hotkeyService: HotkeyService
@@ -22,6 +23,7 @@ final class MenuBarController: ObservableObject {
         credentialStore: CredentialStore = CredentialStore(),
         providerRegistry: ProviderRegistry = ProviderRegistry(),
         captureService: AccessibilityCaptureService = AccessibilityCaptureService(),
+        copilotExecutableLocator: any CopilotCLIExecutableLocating = CopilotCLIExecutableLocator(),
         writebackService: WritebackService = WritebackService(),
         notificationCenter: any UserNotificationCentering = SystemUserNotificationCenter(),
         hotkeyService: HotkeyService = HotkeyService()
@@ -30,6 +32,7 @@ final class MenuBarController: ObservableObject {
         self.credentialStore = credentialStore
         self.providerRegistry = providerRegistry
         self.captureService = captureService
+        self.copilotExecutableLocator = copilotExecutableLocator
         self.writebackService = writebackService
         self.notificationCenter = notificationCenter
         self.hotkeyService = hotkeyService
@@ -55,7 +58,7 @@ final class MenuBarController: ObservableObject {
     }
 
     var requiresOnboarding: Bool {
-        !AccessibilityCaptureService.isTrusted || credentialStore.credential(for: settingsStore.settings.defaultProvider) == nil
+        !AccessibilityCaptureService.isTrusted || !isProviderReady(settingsStore.settings.defaultProvider)
     }
 
     func start() {
@@ -100,8 +103,22 @@ final class MenuBarController: ObservableObject {
         }
     }
 
-    func saveAPIKey(_ apiKey: String) {
-        credentialStore.save(apiKey: apiKey, for: settingsStore.settings.defaultProvider)
+    func saveAPIKey(_ apiKey: String, for providerID: String) {
+        credentialStore.save(apiKey: apiKey, for: providerID)
+    }
+
+    func isProviderReady(_ providerID: String) -> Bool {
+        guard let descriptor = providerRegistry.descriptor(for: providerID) else {
+            return false
+        }
+        if descriptor.requiresStoredCredential {
+            return credentialStore.credential(for: providerID) != nil
+        }
+        if providerID == "copilot" {
+            return copilotExecutableLocator.findExecutable() != nil
+        }
+
+        return true
     }
 
     private func consume(snapshot: TranslationJobSnapshot) {

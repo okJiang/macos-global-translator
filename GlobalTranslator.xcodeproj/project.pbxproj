@@ -20,11 +20,13 @@
 		76A9300886AEEE2EE470B2C2 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BEB1491F77B533B2E1677E /* AppSettingsStore.swift */; };
 		8754A8EB8551AF847030C060 /* TranslationJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78929B3D80C28EA9384E4A6C /* TranslationJob.swift */; };
 		8D884E373B7222FF5A6ECAF7 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EE1EAE0DC5E65BC023DFFE /* MenuBarController.swift */; };
+		92D7E0E945EB971936B8CB9E /* CopilotCLIExecutableLocatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE4A1F1547B29FFB40E0E10 /* CopilotCLIExecutableLocatorTests.swift */; };
 		965204E177A5BF410B69269A /* TargetLanguageResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5D83BA30DEEFB413F136C /* TargetLanguageResolver.swift */; };
 		A147B5173C07146D42F6E6FD /* HotkeyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B225BE2F946203083A19D171 /* HotkeyService.swift */; };
 		A29FE958BDCAAED868A45789 /* ProviderRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B119CE831FEC1A85606A88C0 /* ProviderRegistry.swift */; };
 		A554068842D42E3B14BA8154 /* WritebackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A957A5C64CF3118DD0ABA9 /* WritebackService.swift */; };
 		AB451B8742888333DA2F69F1 /* DeepLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8D12B5757FB7D85A3CD100 /* DeepLProvider.swift */; };
+		B0A547D7590A8ED5CA275E59 /* CopilotCLIProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AA0B49A8C388D963AEBFCB /* CopilotCLIProviderTests.swift */; };
 		B2E00C8451210282B12C7A17 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F716189CE25FB51852A59D08 /* SettingsView.swift */; };
 		BDF210248CDA4206E23F28D4 /* TargetLanguageResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ECA8D5DAA8AA5E76C72816 /* TargetLanguageResolverTests.swift */; };
 		BE9A309BE2815A314626CCE1 /* WritebackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614D715D8460523B68AB47FA /* WritebackServiceTests.swift */; };
@@ -35,6 +37,7 @@
 		D4403A355424F69D2456E7E8 /* TranslationQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67A01302E7A982B05998C29 /* TranslationQueueTests.swift */; };
 		DCE07BD9C69A3C7879CA6824 /* OpenAIProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312E6A2580519C676B71E3F3 /* OpenAIProviderTests.swift */; };
 		DF3DC88B81FEB8D4B8C31C0B /* CapturedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389858F5E8817C49D954E0CA /* CapturedSelection.swift */; };
+		EB130A5E2D0E9FE41A4F2CAD /* CopilotCLIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB25B1D33EF82D9B395407 /* CopilotCLIProvider.swift */; };
 		ED742F3BEC4FFB4F7EEEF24E /* TranslationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF42AB48F0EA6C9D838379B5 /* TranslationQueue.swift */; };
 		F2907B2547D9D25A9C8FE173 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67700474A259DFAD8A829C1 /* OnboardingView.swift */; };
 		F32CA4E0F75E01BC2ACE6EE6 /* AppSettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA31DD2683ACAE7B48202EB /* AppSettingsStoreTests.swift */; };
@@ -63,9 +66,11 @@
 		2F6D2A2C9837397B99D99187 /* ProviderRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRegistryTests.swift; sourceTree = "<group>"; };
 		312E6A2580519C676B71E3F3 /* OpenAIProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIProviderTests.swift; sourceTree = "<group>"; };
 		389858F5E8817C49D954E0CA /* CapturedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedSelection.swift; sourceTree = "<group>"; };
+		40AA0B49A8C388D963AEBFCB /* CopilotCLIProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopilotCLIProviderTests.swift; sourceTree = "<group>"; };
 		42A957A5C64CF3118DD0ABA9 /* WritebackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritebackService.swift; sourceTree = "<group>"; };
 		503D2E4F56460583B222A175 /* ContractTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractTestSupport.swift; sourceTree = "<group>"; };
 		58EB467DC1E85C745F15CD0A /* AccessibilityCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityCaptureService.swift; sourceTree = "<group>"; };
+		5DE4A1F1547B29FFB40E0E10 /* CopilotCLIExecutableLocatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopilotCLIExecutableLocatorTests.swift; sourceTree = "<group>"; };
 		614D715D8460523B68AB47FA /* WritebackServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritebackServiceTests.swift; sourceTree = "<group>"; };
 		61D49BD769F2F9DF4DFE4E8B /* TranslationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationProvider.swift; sourceTree = "<group>"; };
 		68BEB1491F77B533B2E1677E /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
@@ -76,6 +81,7 @@
 		82AB3894C4567D630D3CC9AE /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
 		88C5D83BA30DEEFB413F136C /* TargetLanguageResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetLanguageResolver.swift; sourceTree = "<group>"; };
 		9704C253C0FE7DCD29EDADFA /* GlobalTranslator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GlobalTranslator.entitlements; sourceTree = "<group>"; };
+		99FB25B1D33EF82D9B395407 /* CopilotCLIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopilotCLIProvider.swift; sourceTree = "<group>"; };
 		A0F8F9F49BBFA6A76FF87157 /* FixtureEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureEditorApp.swift; sourceTree = "<group>"; };
 		A67A01302E7A982B05998C29 /* TranslationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationQueueTests.swift; sourceTree = "<group>"; };
 		ABA31DD2683ACAE7B48202EB /* AppSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreTests.swift; sourceTree = "<group>"; };
@@ -99,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				ABA31DD2683ACAE7B48202EB /* AppSettingsStoreTests.swift */,
+				5DE4A1F1547B29FFB40E0E10 /* CopilotCLIExecutableLocatorTests.swift */,
 				2F6D2A2C9837397B99D99187 /* ProviderRegistryTests.swift */,
 				D9ECA8D5DAA8AA5E76C72816 /* TargetLanguageResolverTests.swift */,
 				A67A01302E7A982B05998C29 /* TranslationQueueTests.swift */,
@@ -167,6 +174,14 @@
 			path = DeepL;
 			sourceTree = "<group>";
 		};
+		6AD65BF073FB434621D27642 /* Copilot */ = {
+			isa = PBXGroup;
+			children = (
+				99FB25B1D33EF82D9B395407 /* CopilotCLIProvider.swift */,
+			);
+			path = Copilot;
+			sourceTree = "<group>";
+		};
 		6BC44A6B5269D627356CC3FB /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +223,7 @@
 				B119CE831FEC1A85606A88C0 /* ProviderRegistry.swift */,
 				88C5D83BA30DEEFB413F136C /* TargetLanguageResolver.swift */,
 				61D49BD769F2F9DF4DFE4E8B /* TranslationProvider.swift */,
+				6AD65BF073FB434621D27642 /* Copilot */,
 				6325FB3FAF8653B7BD6A060A /* DeepL */,
 				CE36440EE661D51DB7ADFEA3 /* Google */,
 				6D9F5CDD0115C2BD9EBE6ECD /* OpenAI */,
@@ -274,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				503D2E4F56460583B222A175 /* ContractTestSupport.swift */,
+				40AA0B49A8C388D963AEBFCB /* CopilotCLIProviderTests.swift */,
 				21C10D601E22C39A2DEA9153 /* DeepLProviderTests.swift */,
 				6AA6984E8C900A91DBE30EF7 /* GoogleCloudTranslationProviderTests.swift */,
 				312E6A2580519C676B71E3F3 /* OpenAIProviderTests.swift */,
@@ -427,6 +444,8 @@
 			files = (
 				F32CA4E0F75E01BC2ACE6EE6 /* AppSettingsStoreTests.swift in Sources */,
 				D139333C9FBC329FA123CF59 /* ContractTestSupport.swift in Sources */,
+				92D7E0E945EB971936B8CB9E /* CopilotCLIExecutableLocatorTests.swift in Sources */,
+				B0A547D7590A8ED5CA275E59 /* CopilotCLIProviderTests.swift in Sources */,
 				614272A079DF1B0C3098921D /* DeepLProviderTests.swift in Sources */,
 				5A43B4DB775439DCB6B1BB65 /* GoogleCloudTranslationProviderTests.swift in Sources */,
 				DCE07BD9C69A3C7879CA6824 /* OpenAIProviderTests.swift in Sources */,
@@ -454,6 +473,7 @@
 				CB1113B077C4B3C83B87493E /* AppSettings.swift in Sources */,
 				76A9300886AEEE2EE470B2C2 /* AppSettingsStore.swift in Sources */,
 				DF3DC88B81FEB8D4B8C31C0B /* CapturedSelection.swift in Sources */,
+				EB130A5E2D0E9FE41A4F2CAD /* CopilotCLIProvider.swift in Sources */,
 				4718CE1DDADACF65146AA6F8 /* CredentialStore.swift in Sources */,
 				AB451B8742888333DA2F69F1 /* DeepLProvider.swift in Sources */,
 				FC273183BC29F23C8C635F83 /* GlobalTranslatorApp.swift in Sources */,

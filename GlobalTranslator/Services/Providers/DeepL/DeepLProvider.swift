@@ -6,6 +6,7 @@ struct DeepLProvider: TranslationProvider {
         displayName: "DeepL",
         credentialLabel: "API key",
         credentialPlaceholder: "DeepL API key",
+        requiresStoredCredential: true,
         supportsCustomModel: false,
         defaultModel: nil
     )
@@ -29,9 +30,12 @@ struct DeepLProvider: TranslationProvider {
 
     func translate(
         _ request: TranslationRequest,
-        credential: ProviderCredential,
+        credential: ProviderCredential?,
         preferences: ProviderPreferences
     ) async throws -> TranslationResponse {
+        guard let credential else {
+            throw URLError(.userAuthenticationRequired)
+        }
         _ = preferences
         let targetLanguage = try targetLanguageResolver.resolve(request.targetLanguage, for: descriptor.id)
         var urlRequest = URLRequest(url: credential.apiKey.hasSuffix(":fx") ? freeEndpoint : proEndpoint)

@@ -5,6 +5,7 @@ struct ProviderDescriptor: Equatable, Sendable, Identifiable {
     let displayName: String
     let credentialLabel: String
     let credentialPlaceholder: String
+    let requiresStoredCredential: Bool
     let supportsCustomModel: Bool
     let defaultModel: String?
 }
@@ -23,7 +24,7 @@ protocol TranslationProvider: Sendable {
     var descriptor: ProviderDescriptor { get }
     func translate(
         _ request: TranslationRequest,
-        credential: ProviderCredential,
+        credential: ProviderCredential?,
         preferences: ProviderPreferences
     ) async throws -> TranslationResponse
 }

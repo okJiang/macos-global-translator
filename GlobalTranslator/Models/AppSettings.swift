@@ -85,7 +85,7 @@ struct AppSettings: Codable, Equatable, Sendable {
     init(
         targetLanguage: String = "English",
         hotkey: HotkeyShortcut = .commandShiftT,
-        defaultProvider: String = "openai",
+        defaultProvider: String = "copilot",
         providerPreferences: [String: ProviderPreferences] = ["openai": .openAIDefault],
         recentJobs: [RecentTranslationJob] = []
     ) {

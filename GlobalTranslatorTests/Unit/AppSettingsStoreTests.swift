@@ -7,7 +7,7 @@ final class AppSettingsStoreTests: XCTestCase {
         let store = AppSettingsStore(keyValueStore: InMemoryKeyValueStore())
 
         XCTAssertEqual(store.settings.targetLanguage, "English")
-        XCTAssertEqual(store.settings.defaultProvider, "openai")
+        XCTAssertEqual(store.settings.defaultProvider, "copilot")
         XCTAssertEqual(store.settings.hotkey, .commandShiftT)
         XCTAssertTrue(store.settings.recentJobs.isEmpty)
     }
