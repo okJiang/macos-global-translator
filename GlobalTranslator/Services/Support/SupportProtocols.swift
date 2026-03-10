@@ -26,7 +26,11 @@ protocol FileManaging: Sendable {
     func fileExists(atPath path: String) -> Bool
 }
 
-extension FileManager: FileManaging {}
+struct DefaultFileManager: FileManaging {
+    func fileExists(atPath path: String) -> Bool {
+        FileManager.default.fileExists(atPath: path)
+    }
+}
 
 protocol ClipboardWriting {
     func copy(_ string: String)

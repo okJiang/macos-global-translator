@@ -9,7 +9,7 @@ struct CopilotCLIExecutableLocator: CopilotCLIExecutableLocating {
     private let environment: [String: String]
 
     init(
-        fileManager: any FileManaging = FileManager.default,
+        fileManager: any FileManaging = DefaultFileManager(),
         environment: [String: String] = ProcessInfo.processInfo.environment
     ) {
         self.fileManager = fileManager
