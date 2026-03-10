@@ -77,22 +77,21 @@ actor TranslationQueue {
     }
 
     private func process(_ job: QueuedJob) async -> TranslationJobStatus {
-        guard let credential = job.credential else {
-            await notificationCenter.notify(
-                title: "Missing API key",
-                body: "Add an API key before running translations."
-            )
-            return .failed
-        }
-
         do {
             let provider = try providerRegistry.provider(for: job.settings.defaultProvider)
+            if provider.descriptor.requiresStoredCredential, job.credential == nil {
+                await notificationCenter.notify(
+                    title: "Missing API key",
+                    body: "Add an API key before running translations."
+                )
+                return .failed
+            }
             let response = try await provider.translate(
                 TranslationRequest(
                     text: job.selection.selectedText,
                     targetLanguage: job.settings.targetLanguage
                 ),
-                credential: credential,
+                credential: job.credential,
                 preferences: job.settings.preferences(for: job.settings.defaultProvider)
             )
             let outcome = await MainActor.run {

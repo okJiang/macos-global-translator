@@ -6,6 +6,7 @@ struct OpenAIProvider: TranslationProvider {
         displayName: "OpenAI",
         credentialLabel: "API key",
         credentialPlaceholder: "OpenAI API key",
+        requiresStoredCredential: true,
         supportsCustomModel: true,
         defaultModel: "gpt-4.1-mini"
     )
@@ -23,9 +24,12 @@ struct OpenAIProvider: TranslationProvider {
 
     func translate(
         _ request: TranslationRequest,
-        credential: ProviderCredential,
+        credential: ProviderCredential?,
         preferences: ProviderPreferences
     ) async throws -> TranslationResponse {
+        guard let credential else {
+            throw URLError(.userAuthenticationRequired)
+        }
         guard let model = preferences.model ?? descriptor.defaultModel else {
             throw URLError(.userAuthenticationRequired)
         }

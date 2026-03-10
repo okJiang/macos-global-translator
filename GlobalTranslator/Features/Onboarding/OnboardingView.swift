@@ -5,7 +5,40 @@ struct OnboardingView: View {
 
     private var defaultProviderDescriptor: ProviderDescriptor {
         controller.providerRegistry.descriptor(for: controller.settingsStore.settings.defaultProvider)
-            ?? OpenAIProvider().descriptor
+            ?? CopilotCLIProvider().descriptor
+    }
+
+    private var defaultProviderID: String {
+        controller.settingsStore.settings.defaultProvider
+    }
+
+    private var providerSetupTitle: String {
+        defaultProviderDescriptor.requiresStoredCredential ? defaultProviderDescriptor.credentialLabel : "GitHub Copilot CLI"
+    }
+
+    private var providerSetupDetail: String {
+        if defaultProviderDescriptor.requiresStoredCredential {
+            return controller.credentialStore.credential(for: defaultProviderID) == nil ? "Missing" : "Saved"
+        }
+
+        return controller.isProviderReady(defaultProviderID)
+            ? "Detected locally"
+            : "Missing. Install and sign in locally."
+    }
+
+    private var providerSetupButtonTitle: String {
+        defaultProviderDescriptor.requiresStoredCredential ? "Open Settings" : "Open Copilot Docs"
+    }
+
+    private func openProviderSetup() {
+        if defaultProviderDescriptor.requiresStoredCredential {
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            return
+        }
+
+        if let url = URL(string: "https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     var body: some View {
@@ -24,12 +57,11 @@ struct OnboardingView: View {
             }
 
             setupRow(
-                title: defaultProviderDescriptor.credentialLabel,
-                detail: controller.credentialStore.credential(for: controller.settingsStore.settings.defaultProvider) == nil ? "Missing" : "Saved",
-                buttonTitle: "Open Settings"
-            ) {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-            }
+                title: providerSetupTitle,
+                detail: providerSetupDetail,
+                buttonTitle: providerSetupButtonTitle,
+                action: openProviderSetup
+            )
 
             setupRow(
                 title: "Hotkey",

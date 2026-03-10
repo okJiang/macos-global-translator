@@ -12,7 +12,7 @@ final class TranslationQueueTests: XCTestCase {
             writebackService: writebackService,
             notificationCenter: NoopUserNotificationCenter()
         )
-        let settings = AppSettings()
+        let settings = AppSettings(defaultProvider: "openai")
         let selectionA = CapturedSelection(
             frontmostBundleID: "com.apple.TextEdit",
             selectedText: "hello",
@@ -45,6 +45,37 @@ final class TranslationQueueTests: XCTestCase {
         XCTAssertEqual(snapshots.map(\.status), [.succeeded, .succeeded])
         XCTAssertEqual(recordedTexts, ["hello", "world"])
     }
+
+    func testProcessesCredentiallessProvidersWithoutFailingPreflight() async throws {
+        let provider = FakeCredentiallessProvider()
+        let registry = ProviderRegistry(providers: [provider])
+        let clipboard = ClipboardSpy()
+        let writebackService = await MainActor.run { WritebackService(clipboard: clipboard) }
+        let queue = TranslationQueue(
+            providerRegistry: registry,
+            writebackService: writebackService,
+            notificationCenter: NoopUserNotificationCenter()
+        )
+        let settings = AppSettings(defaultProvider: "copilot")
+        let selection = CapturedSelection(
+            frontmostBundleID: "com.apple.TextEdit",
+            selectedText: "hello",
+            selectedRange: NSRange(location: 0, length: 5),
+            capturedAt: Date(),
+            writebackTarget: RecordingWritebackTarget()
+        )
+
+        _ = await queue.enqueue(
+            selection: selection,
+            settings: settings,
+            credential: nil
+        )
+        let snapshots = await queue.waitUntilIdle()
+        let recordedTexts = await provider.recordedTexts
+
+        XCTAssertEqual(snapshots.map(\.status), [.succeeded])
+        XCTAssertEqual(recordedTexts, ["hello"])
+    }
 }
 
 private actor FakeProvider: TranslationProvider {
@@ -53,12 +84,32 @@ private actor FakeProvider: TranslationProvider {
         displayName: "OpenAI",
         credentialLabel: "API key",
         credentialPlaceholder: "OpenAI API key",
+        requiresStoredCredential: true,
         supportsCustomModel: true,
         defaultModel: "gpt-4.1-mini"
     )
     private(set) var recordedTexts: [String] = []
 
-    func translate(_ request: TranslationRequest, credential: ProviderCredential, preferences: ProviderPreferences) async throws -> TranslationResponse {
+    func translate(_ request: TranslationRequest, credential: ProviderCredential?, preferences: ProviderPreferences) async throws -> TranslationResponse {
+        recordedTexts.append(request.text)
+        return TranslationResponse(translatedText: "translated-\(request.text)", detectedSourceLanguage: "auto")
+    }
+}
+
+private actor FakeCredentiallessProvider: TranslationProvider {
+    nonisolated let descriptor = ProviderDescriptor(
+        id: "copilot",
+        displayName: "GitHub Copilot",
+        credentialLabel: "",
+        credentialPlaceholder: "",
+        requiresStoredCredential: false,
+        supportsCustomModel: true,
+        defaultModel: nil
+    )
+    private(set) var recordedTexts: [String] = []
+
+    func translate(_ request: TranslationRequest, credential: ProviderCredential?, preferences: ProviderPreferences) async throws -> TranslationResponse {
+        XCTAssertNil(credential)
         recordedTexts.append(request.text)
         return TranslationResponse(translatedText: "translated-\(request.text)", detectedSourceLanguage: "auto")
     }

@@ -10,7 +10,7 @@ struct SettingsView: View {
 
     private var selectedProviderDescriptor: ProviderDescriptor {
         controller.providerRegistry.descriptor(for: selectedProvider)
-            ?? OpenAIProvider().descriptor
+            ?? CopilotCLIProvider().descriptor
     }
 
     var body: some View {
@@ -49,10 +49,21 @@ struct SettingsView: View {
                 }
             }
 
-            Section(selectedProviderDescriptor.credentialLabel) {
-                SecureField(selectedProviderDescriptor.credentialPlaceholder, text: $apiKey)
-                Button("Save \(selectedProviderDescriptor.credentialLabel)") {
-                    controller.saveAPIKey(apiKey)
+            if selectedProviderDescriptor.requiresStoredCredential {
+                Section(selectedProviderDescriptor.credentialLabel) {
+                    SecureField(selectedProviderDescriptor.credentialPlaceholder, text: $apiKey)
+                    Button("Save \(selectedProviderDescriptor.credentialLabel)") {
+                        controller.saveAPIKey(apiKey, for: selectedProvider)
+                    }
+                }
+            } else {
+                Section("Provider Setup") {
+                    Text(
+                        controller.isProviderReady(selectedProvider)
+                            ? "GitHub Copilot CLI was found locally and will use your existing CLI session."
+                            : "Install GitHub Copilot CLI locally and sign in from Terminal before using this provider."
+                    )
+                    .foregroundStyle(.secondary)
                 }
             }
 
@@ -87,7 +98,7 @@ struct SettingsView: View {
     }
 
     private func reloadProviderFields(for providerID: String) {
-        let descriptor = controller.providerRegistry.descriptor(for: providerID) ?? OpenAIProvider().descriptor
+        let descriptor = controller.providerRegistry.descriptor(for: providerID) ?? CopilotCLIProvider().descriptor
         model = controller.settingsStore.settings.preferences(for: providerID).model ?? descriptor.defaultModel ?? ""
         apiKey = controller.credentialStore.apiKey(for: providerID)
     }
