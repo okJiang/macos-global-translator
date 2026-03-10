@@ -32,6 +32,17 @@ final class AppSettingsStoreTests: XCTestCase {
         XCTAssertEqual(secondStore.settings.providerPreferences["openai"]?.model, "gpt-4.1-mini")
         XCTAssertEqual(secondStore.settings.recentJobs.count, 1)
     }
+
+    func testDoesNotPersistDefaultModelForProvidersWithoutCustomModel() {
+        let keyValueStore = InMemoryKeyValueStore()
+        let firstStore = AppSettingsStore(keyValueStore: keyValueStore)
+
+        firstStore.setAPIModel("", for: "deepl")
+
+        let secondStore = AppSettingsStore(keyValueStore: keyValueStore)
+
+        XCTAssertNil(secondStore.settings.providerPreferences["deepl"]?.model)
+    }
 }
 
 private final class InMemoryKeyValueStore: KeyValueStoring {

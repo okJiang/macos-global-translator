@@ -1,8 +1,14 @@
 import Foundation
 
 struct OpenAIProvider: TranslationProvider {
-    let id = "openai"
-    let displayName = "OpenAI"
+    let descriptor = ProviderDescriptor(
+        id: "openai",
+        displayName: "OpenAI",
+        credentialLabel: "API key",
+        credentialPlaceholder: "OpenAI API key",
+        supportsCustomModel: true,
+        defaultModel: "gpt-4.1-mini"
+    )
 
     private let session: any HTTPClient
     private let endpoint: URL
@@ -20,13 +26,17 @@ struct OpenAIProvider: TranslationProvider {
         credential: ProviderCredential,
         preferences: ProviderPreferences
     ) async throws -> TranslationResponse {
+        guard let model = preferences.model ?? descriptor.defaultModel else {
+            throw URLError(.userAuthenticationRequired)
+        }
+
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("Bearer \(credential.apiKey)", forHTTPHeaderField: "Authorization")
         urlRequest.httpBody = try JSONEncoder().encode(
             ChatCompletionRequest(
-                model: preferences.model,
+                model: model,
                 messages: [
                     .init(
                         role: "system",

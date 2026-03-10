@@ -38,8 +38,9 @@ final class AppSettingsStore: ObservableObject {
     }
 
     func setAPIModel(_ model: String, for providerID: String) {
+        let trimmed = model.trimmingCharacters(in: .whitespacesAndNewlines)
         settings.providerPreferences[providerID] = ProviderPreferences(
-            model: model.isEmpty ? ProviderPreferences.openAIDefault.model : model
+            model: trimmed.isEmpty ? nil : trimmed
         )
         persist()
     }

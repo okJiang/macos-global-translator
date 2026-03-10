@@ -34,9 +34,10 @@ enum HotkeyShortcut: String, Codable, CaseIterable, Equatable, Sendable, Identif
 }
 
 struct ProviderPreferences: Codable, Equatable, Sendable {
-    var model: String
+    var model: String?
 
     static let openAIDefault = ProviderPreferences(model: "gpt-4.1-mini")
+    static let empty = ProviderPreferences(model: nil)
 }
 
 struct ProviderCredential: Equatable, Sendable {
@@ -96,6 +97,6 @@ struct AppSettings: Codable, Equatable, Sendable {
     }
 
     func preferences(for providerID: String) -> ProviderPreferences {
-        providerPreferences[providerID] ?? .openAIDefault
+        providerPreferences[providerID] ?? .empty
     }
 }

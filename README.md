@@ -9,7 +9,7 @@ A native macOS menu bar translator that captures selected editable text, transla
 - Background serial translation queue
 - Direct writeback to the original selection when the source element is still writable
 - Safe fallback to notification plus clipboard when writeback fails
-- OpenAI adapter as the first built-in provider, with a provider registry for future adapters
+- Built-in OpenAI and DeepL adapters, with a provider registry for future adapters
 
 ## Project Layout
 
@@ -31,6 +31,6 @@ open GlobalTranslator.xcodeproj
 ## Setup Notes
 
 1. Grant Accessibility permission to `GlobalTranslator`.
-2. Save an OpenAI API key in Settings.
-3. Pick a target language and preferred hotkey.
+2. Save a provider API key in Settings.
+3. Pick a target language using a common language name or code, then choose a preferred hotkey.
 4. Select editable text in another app and press the hotkey.

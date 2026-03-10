@@ -48,8 +48,14 @@ final class TranslationQueueTests: XCTestCase {
 }
 
 private actor FakeProvider: TranslationProvider {
-    nonisolated let id = "openai"
-    nonisolated let displayName = "OpenAI"
+    nonisolated let descriptor = ProviderDescriptor(
+        id: "openai",
+        displayName: "OpenAI",
+        credentialLabel: "API key",
+        credentialPlaceholder: "OpenAI API key",
+        supportsCustomModel: true,
+        defaultModel: "gpt-4.1-mini"
+    )
     private(set) var recordedTexts: [String] = []
 
     func translate(_ request: TranslationRequest, credential: ProviderCredential, preferences: ProviderPreferences) async throws -> TranslationResponse {

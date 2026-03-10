@@ -3,6 +3,11 @@ import SwiftUI
 struct OnboardingView: View {
     @ObservedObject var controller: MenuBarController
 
+    private var defaultProviderDescriptor: ProviderDescriptor {
+        controller.providerRegistry.descriptor(for: controller.settingsStore.settings.defaultProvider)
+            ?? OpenAIProvider().descriptor
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Finish setup")
@@ -19,7 +24,7 @@ struct OnboardingView: View {
             }
 
             setupRow(
-                title: "API key",
+                title: defaultProviderDescriptor.credentialLabel,
                 detail: controller.credentialStore.credential(for: controller.settingsStore.settings.defaultProvider) == nil ? "Missing" : "Saved",
                 buttonTitle: "Open Settings"
             ) {
